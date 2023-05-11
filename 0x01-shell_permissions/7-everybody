@@ -1,2 +1,2 @@
-#!/bini/bash
-chmod a hello
+#!/bin/bash
+chmod ugo+x hello
