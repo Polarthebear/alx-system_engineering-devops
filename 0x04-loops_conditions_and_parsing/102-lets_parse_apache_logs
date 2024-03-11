@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Bash script that parses apache log files in list format
 
 file="apache-access.log"
