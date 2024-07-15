@@ -3,6 +3,11 @@
 # Nginx where it should be listening on port 80
 # Serve a page that would return a Hello World string
 
+#!/usr/bin/env bash
+# Script that configures a new Ubuntu machine to respect the requirements
+# Nginx where it should be listening on port 80
+# Serve a page that would return a Hello World string
+
 # allow nginx on firewall
 sudo ufw allow 'Nginx HTTP'
 
@@ -11,7 +16,7 @@ echo "Hello World!" | sudo tee /var/www/html/index.html
 
 # variable containing string and directive
 
-#string_rep="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4 permanent;"
+string_rep="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4 permanent;"
 
 # use sed to replace text
 
