@@ -3,24 +3,44 @@
 # Nginx where it should be listening on port 80
 # Serve a page that would return a Hello World string
 
-#!/usr/bin/env bash
-# Script that configures a new Ubuntu machine to respect the requirements
-# Nginx where it should be listening on port 80
-# Serve a page that would return a Hello World string
+# Update package lists
+apt-get update
 
-# allow nginx on firewall
+# Install Nginx
+apt-get -y install nginx
+
+# Allow HTTP traffic through the firewall
 sudo ufw allow 'Nginx HTTP'
 
-# Creating index
-echo "Hello World!" | sudo tee /var/www/html/index.html
+# Create directory for web content and set permissions
+mkdir -p /var/www/html/
+sudo chmod -R 755 /var/www
 
-# variable containing string and directive
+# Create index.html with "Hello World!" message
+echo 'Hello World!' > /var/www/html/index.html
 
-string_rep="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4 permanent;"
+# Define Nginx server configuration
+SERVER_CONFIG="\
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+    server_name _;
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+    if (\$request_filename ~ redirect_me){
+        rewrite ^ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;
+    }
+}"
 
-# use sed to replace text
+# Write server configuration to Nginx default site configuration file
+echo "$SERVER_CONFIG" > /etc/nginx/sites-enabled/default
 
-#sudo sed -i "s/server_name _;/$string_rep/" /etc/nginx/sites-available/default
-sudo sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/ permanent;' /etc/nginx/sites-available/default
-# restart the nginx service
-sudo service nginx restart
+# Check if Nginx is running and start or restart it
+if [ "$(pgrep -c nginx)" -le 0 ]; then
+    service nginx start
+else
+    service nginx restart
+fi
