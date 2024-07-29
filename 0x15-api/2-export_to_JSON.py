@@ -21,19 +21,21 @@ if __name__ == "__main__":
     username = user.get("username")
 
     # Use emplyee ID to gather the to-do list
-    parameters = {"userId": user_id}
-    todos = requests.get(url + "todos", parameters).json()
+    params = {"userId": user_id}
+    todos = requests.get(url + "todos", params).json()
 
     # Make dictionary with user and to-do list information
     data_to_export = {
             user_id: [
                 {
-                    "task": t.get("completed"),
+                    "task": t.get("title"),
+                    "completed": t.get("completed"),
                     "username": username
                 }
                 for t in todos
             ]
         }
+
     # Write relevant data to JSON file with employee_id as filename
     with open("{}.json".format(user_id), "w") as jsonfile:
         json.dump(data_to_export, jsonfile, indent=4)
