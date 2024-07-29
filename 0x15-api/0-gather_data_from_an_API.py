@@ -24,11 +24,11 @@ if __name__ == "__main__":
     todos = requests.get(url + "todos", parameters).json()
 
     # Use filtering to count completed tasks
-    comp_tasks = [t.get("title") for t in todos if t.get("comp_tasks") is True]
+    completed = [t.get("title") for t in todos if t.get("completed") is True]
 
     # Print employee name and completed tasks
     print("Employee {} is done with tasks({}/{}):".format(
-        user.get("name"), len(comp_tasks), len(todos)))
+        user.get("name"), len(completed), len(todos)))
 
     # Print the tasks completed with indents
-    [print("\t {}".format(comp_tasks)) for complete in comp_tasks]
+    [print("\t {}".format(completed)) for complete in completed]
